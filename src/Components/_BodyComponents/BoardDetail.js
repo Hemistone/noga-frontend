@@ -10,6 +10,7 @@ const QUERY = gql`
       ADboardName
       viewpointList {
         viewscore
+        createdAt
       }
     }
   }
@@ -31,7 +32,9 @@ export default () => {
           <h1>{ADboard.ADboardName}</h1>
           <ul>
             {ADboard.viewpointList.map(VP => (
-              <li>{VP.viewscore}</li>
+              <li>
+                {VP.viewscore} / {VP.createdAt}
+              </li>
             ))}
           </ul>
         </tr>

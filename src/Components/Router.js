@@ -1,17 +1,11 @@
 import React from "react";
 import { HashRouter as Router, Route } from "react-router-dom";
-import ConsoleLobby from "../Routes/ConsoleLobby";
+import Landing from "../Routes/Landing";
+import Console from "../Routes/Console";
 
-const ConsoleLobbyRoutes = () => (
-  <>
-    <Route exact path="/" component={ConsoleLobby} />
-  </>
-);
-
-const AppRouter = () => (
+export default () => (
   <Router>
-    <ConsoleLobbyRoutes />
+    <Route exact path="/" component={Landing} />
+    <Route exact path="/console" component={Console} />
   </Router>
 );
-
-export default AppRouter;
