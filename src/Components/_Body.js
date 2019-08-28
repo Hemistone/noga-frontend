@@ -1,22 +1,21 @@
-import { Layout, Menu, Breadcrumb, Icon, Divider } from "antd";
+import { Layout, Breadcrumb, Icon, Divider } from "antd";
 import React from "react";
 import styled from "styled-components";
 import BoardDetail from "./_BodyComponents/BoardDetail";
 
-const { SubMenu } = Menu;
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 
 const Hr = styled.div`
   padding: 0px 15px;
 `;
 
-export default () => {
+export default ({ boardID }) => {
   return (
     <Layout style={{ padding: "0 24px 24px" }}>
       <Breadcrumb style={{ margin: "16px 0" }}>
         <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>List</Breadcrumb.Item>
-        <Breadcrumb.Item>App</Breadcrumb.Item>
+        <Breadcrumb.Item>FPSArena</Breadcrumb.Item>
+        <Breadcrumb.Item>{boardID}</Breadcrumb.Item>
       </Breadcrumb>
       <Content
         style={{
@@ -26,7 +25,7 @@ export default () => {
           minHeight: 280
         }}
       >
-        <BoardDetail />
+        <BoardDetail ID={boardID} />
       </Content>
     </Layout>
   );

@@ -4,6 +4,9 @@ import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
 import Router from "./Router";
 
+export default () => <Router />;
+
+/*
 export default () => (
   <ThemeProvider theme={Theme}>
     <>
@@ -12,3 +15,4 @@ export default () => (
     </>
   </ThemeProvider>
 );
+*/
