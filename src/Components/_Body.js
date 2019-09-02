@@ -1,13 +1,8 @@
-import { Layout, Breadcrumb, Icon, Divider } from "antd";
+import { Layout, Breadcrumb } from "antd";
 import React from "react";
-import styled from "styled-components";
 import BoardDetail from "./_BodyComponents/BoardDetail";
 
 const { Content } = Layout;
-
-const Hr = styled.div`
-  padding: 0px 15px;
-`;
 
 export default ({ boardID }) => {
   return (

@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import "antd/dist/antd.css";
+import styled from "styled-components";
 import { Icon, Typography, Row, Col, Card, Divider } from "antd";
 import Lobby from "./Lobby";
-import VPgraph from "./VPgraph";
 import VPgraph_Area from "./VPgraph_Area";
 
+import screenShot from "../../Icons/IngameImages.png";
+
 const { Title } = Typography;
+const { Meta } = Card;
+
+const Padding = styled.div`
+  padding: 8px 0px;
+`;
 
 const GET_ADBOARD = gql`
   query getADboard($id: String!) {
     getADboard(id: $id) {
       id
+      game {
+        name
+        coverImage
+      }
       ADboardName
       ADboardImage
       description
@@ -48,10 +59,6 @@ const getTotalViewscores = (viewpointList, today) => {
   return { ViewscoreToday, ViewscoreTotal };
 };
 
-const getTotalExtraImpression = () => {
-  return;
-};
-
 export default ({ ID }) => {
   if (ID === "1") {
     return <Lobby />;
@@ -74,7 +81,8 @@ export default ({ ID }) => {
       const ADboardName = data.getADboard.ADboardName;
       const ADimageURL = data.getADboard.ADboardImage;
       const viewpointList = data.getADboard.viewpointList;
-      if (viewpointList == null) {
+      if (typeof viewpointList == "undefined" || viewpointList.length == 0) {
+        console.log("Passed Null!");
         return (
           <>
             <Title level={1} type="primary">
@@ -87,6 +95,12 @@ export default ({ ID }) => {
           </>
         );
       }
+
+      const description = data.getADboard.description;
+      const game = data.getADboard.game.name;
+      const gameCoverimage = data.getADboard.game.coverImage;
+      const ingameImages = data.getADboard.IngameImages;
+
       const date = getTodayDate();
       //console.log("today date is", date);
       const { ViewscoreToday, ViewscoreTotal } = getTotalViewscores(
@@ -101,37 +115,78 @@ export default ({ ID }) => {
           <Divider />
           <Row gutter={16}>
             <Col span={6}>
-              <img
-                style={{ borderRadius: "2px", border: "1px solid #ddd" }}
-                src={ADimageURL}
-                width="100%"
-                alt="AD board in the game"
-              />
               <Card
-                title="오늘 수집된 임프레션 팩터"
-                style={{ margin: "12px 0px 0px 0px" }}
-                type="inner"
+                cover={
+                  <img
+                    src={ADimageURL}
+                    width="100%"
+                    alt="AD board in the game"
+                  />
+                }
               >
-                {ViewscoreToday}
+                <Meta
+                  avatar={<Icon type="bank" theme="twoTone" />}
+                  title="광고대행사 (주)애드미"
+                  description={description}
+                />
               </Card>
-              <Card
-                title="전체 임프레션 팩터"
-                style={{ margin: "12px 0px 0px 0px" }}
-                type="inner"
-              >
-                {ViewscoreTotal}
-              </Card>
-              <Card
-                title="스폐셜 임팩트 스코어"
-                style={{ margin: "12px 0px 0px 0px" }}
-                type="inner"
-              >
-                Content
-              </Card>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Card
+                    title="오늘 광고효과"
+                    style={{ margin: "12px 0px 0px 0px" }}
+                    type="inner"
+                  >
+                    <Title level={3} type="primary">
+                      {ViewscoreToday}
+                    </Title>
+                  </Card>
+                </Col>
+                <Col span={12}>
+                  <Card
+                    title="전체 광고효과"
+                    style={{ margin: "12px 0px 0px 0px" }}
+                    type="inner"
+                  >
+                    <Title level={3} type="primary">
+                      {ViewscoreTotal}
+                    </Title>
+                  </Card>
+                </Col>
+              </Row>
             </Col>
-            <Col span={18}>
-              <VPgraph data={viewpointList} />
-              <VPgraph_Area data={viewpointList} />
+            <Col span={17}>
+              <Row gutter={16} type="flex">
+                <Col>
+                  <Card>
+                    <Meta
+                      avatar={<img src={gameCoverimage} height="102px" />}
+                      title={game}
+                      description="이 광고가 삽입되어있는 게임"
+                    />
+                  </Card>
+                </Col>
+                <Col>
+                  <img src={screenShot} alt="Description of Images" />
+                </Col>
+                {ingameImages.map(image => (
+                  <Col>
+                    <img
+                      src={image}
+                      height="148px"
+                      style={{
+                        borderRadius: "2px",
+                        border: "1px solid #e8e8e8"
+                      }}
+                      alt="Ingame Images of AD"
+                    />
+                  </Col>
+                ))}
+              </Row>
+              <Padding />
+              <Card>
+                <VPgraph_Area data={viewpointList} />
+              </Card>
             </Col>
           </Row>
         </>

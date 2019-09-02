@@ -1,4 +1,4 @@
-import { Layout, Menu, Icon, Divider } from "antd";
+import { Layout, Menu, Icon, Divider, Typography } from "antd";
 import React from "react";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
@@ -7,6 +7,7 @@ import { useQuery } from "react-apollo-hooks";
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
+const { Title, Text } = Typography;
 
 const Hr = styled.div`
   padding: 0px 15px;
@@ -82,6 +83,11 @@ export default ({ setBoardID }) => {
         <Hr>
           <Divider />
         </Hr>
+        <Menu.Item key="0" disabled="true">
+          <Icon type="database" />
+          게임 목록
+        </Menu.Item>
+
         {data.getGameList.map(Game => (
           <SubMenu
             key={Game.id}

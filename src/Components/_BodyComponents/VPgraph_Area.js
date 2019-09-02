@@ -53,11 +53,13 @@ const ChangeData = (data, userList) => {
 
 export default data => {
   const Data = data.data;
-  console.log(Data);
+  if (Data == null) {
+    return "No data!";
+  }
   const userList = getUserList(Data);
-  console.log("USER LIST: " + userList);
+  //console.log("USER LIST: " + userList);
   const graphData = ChangeData(Data, userList);
-  console.log(graphData);
+  //console.log(graphData);
   return (
     <AreaChart
       width={1000}
