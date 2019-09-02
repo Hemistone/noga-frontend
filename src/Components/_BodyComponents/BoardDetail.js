@@ -4,6 +4,8 @@ import { useQuery } from "react-apollo-hooks";
 import "antd/dist/antd.css";
 import { Icon, Typography, Row, Col, Card, Divider } from "antd";
 import Lobby from "./Lobby";
+import VPgraph from "./VPgraph";
+import VPgraph_Area from "./VPgraph_Area";
 
 const { Title } = Typography;
 
@@ -13,7 +15,10 @@ const GET_ADBOARD = gql`
       id
       ADboardName
       ADboardImage
+      description
+      IngameImages
       viewpointList {
+        userName
         viewscore
         createdAt
       }
@@ -23,7 +28,7 @@ const GET_ADBOARD = gql`
 
 const getTodayDate = () => {
   var today = new Date();
-  const dd = String(today.getDate() - 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
   const mm = String(today.getMonth() + 1).padStart(2, "0");
   const yyyy = today.getFullYear();
   const date = yyyy + "-" + mm + "-" + dd;
@@ -66,18 +71,32 @@ export default ({ ID }) => {
     } else if (error) {
       return <Title level={2}>Error! {error.message}</Title>;
     } else {
+      const ADboardName = data.getADboard.ADboardName;
+      const ADimageURL = data.getADboard.ADboardImage;
       const viewpointList = data.getADboard.viewpointList;
+      if (viewpointList == null) {
+        return (
+          <>
+            <Title level={1} type="primary">
+              {ADboardName}
+            </Title>
+            <Divider />
+            <Title level={5} type="secondary">
+              No viewpoints Yet! Bring players to let view your advertisement!
+            </Title>
+          </>
+        );
+      }
       const date = getTodayDate();
       //console.log("today date is", date);
       const { ViewscoreToday, ViewscoreTotal } = getTotalViewscores(
         viewpointList,
         date
       );
-      const ADimageURL = data.getADboard.ADboardImage;
       return (
         <>
           <Title level={1} type="primary">
-            {data.getADboard.ADboardName}
+            {ADboardName}
           </Title>
           <Divider />
           <Row gutter={16}>
@@ -103,23 +122,18 @@ export default ({ ID }) => {
                 {ViewscoreTotal}
               </Card>
               <Card
-                title="Total Viewscore / Today"
+                title="스폐셜 임팩트 스코어"
                 style={{ margin: "12px 0px 0px 0px" }}
                 type="inner"
               >
                 Content
               </Card>
             </Col>
-            <Col span={18}></Col>
+            <Col span={18}>
+              <VPgraph data={viewpointList} />
+              <VPgraph_Area data={viewpointList} />
+            </Col>
           </Row>
-
-          <div>
-            {viewpointList.map(VP => (
-              <p>
-                {VP.viewscore} / {VP.createdAt}
-              </p>
-            ))}
-          </div>
         </>
       );
     }

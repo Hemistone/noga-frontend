@@ -12,7 +12,7 @@ const Hr = styled.div`
   padding: 0px 15px;
 `;
 const Padding = styled.div`
-  padding: 30px 22px;
+  padding: 20px 22px;
 `;
 
 /*
@@ -87,7 +87,7 @@ export default ({ setBoardID }) => {
             key={Game.id}
             title={
               <span>
-                <Icon type="notification" />
+                <Icon type="area-chart" />
                 {Game.name}
               </span>
             }
